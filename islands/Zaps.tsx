@@ -1,5 +1,6 @@
 import axiod from "https://deno.land/x/axiod@0.26.2/mod.ts";
 import { useState } from "preact/hooks";
+import { isValidName, isValidPubkey } from "../utils.ts";
 
 interface IData {
   error: boolean;
@@ -38,7 +39,6 @@ const Zaps = () => {
       .then((res) => {
         if (res.data.success) {
           setData(res.data);
-          // setData({ error: false, data: res.data, success: true });
         }
         if (res.data.error) setData({ error: true, data: res.data.error });
       });
@@ -49,28 +49,39 @@ const Zaps = () => {
       <div>
         <input
           type="text"
-          value={pubKey}
+          // value={pubKey}
           placeholder="public key"
           maxLength={64}
-          onInput={(e: Event) =>
-            setPubKey((e.target as HTMLInputElement).value)
-          }
+          onInput={(e: Event) => {
+            const pubkey = (e.target as HTMLInputElement).value;
+
+            if (!isValidPubkey(pubkey)) {
+              return setData({
+                error: true,
+                data: "Invalid public key",
+              });
+            } else {
+              setData({ error: false, data: "" });
+            }
+
+            setPubKey(pubkey);
+          }}
         />
       </div>
 
       <div className="address">
         <input
           type="text"
-          value={name}
+          // value={name}
           placeholder="username"
           maxLength={64}
           onInput={(e: Event) => {
             const name = (e.target as HTMLInputElement).value;
 
-            if (!name.match(/^[A-Za-z0-9]*$/)) {
+            if (!isValidName(name)) {
               return setData({
                 error: true,
-                data: "Name can be only: A-Za-z0-9",
+                data: "Name can be only: a-z0-9",
               });
             } else {
               setData({ error: false, data: "" });

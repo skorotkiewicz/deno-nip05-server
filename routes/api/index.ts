@@ -1,6 +1,6 @@
 import { Handlers, HandlerContext } from "$fresh/server.ts";
 import db from "../../Database.ts";
-import { readJson } from "../../utils.ts";
+import { readJson, isValidName, isValidPubkey } from "../../utils.ts";
 
 interface IData {
   name: string;
@@ -18,9 +18,9 @@ export const handler: Handlers = {
     const json: IData | undefined = await readJson(payload);
 
     if (json && json.name && json.pubKey) {
-      if (!json.name.match(/^[A-Za-z0-9]*$/)) {
+      if (!isValidName(json.name) || !isValidPubkey(json.pubKey)) {
         return Response.json(
-          { error: "Name can be only: A-Za-z0-9" },
+          { error: "Invalid username or pubkey" },
           { status: 400 }
         );
       }
@@ -50,9 +50,9 @@ export const handler: Handlers = {
     let available = false;
     const name: string = new URL(req.url).searchParams.get("name") || "";
 
-    if (!name.match(/^[A-Za-z0-9]*$/)) {
+    if (!isValidName(name)) {
       return Response.json(
-        { error: "Name can be only: A-Za-z0-9" },
+        { error: "Name can be only: a-z0-9" },
         { status: 400 }
       );
     }
