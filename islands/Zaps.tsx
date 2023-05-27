@@ -99,7 +99,7 @@ const Zaps = () => {
         />
 
         <label>
-          <strong>@sekor.eu.org</strong>
+          <strong>@z.sekor.eu.org</strong>
         </label>
       </div>
 
@@ -119,7 +119,7 @@ const Zaps = () => {
         {data?.success && (
           <span>
             <p>
-              <h3>{data.name}@sekor.eu.org</h3>
+              <h3>{data.name}@z.sekor.eu.org</h3>
             </p>
             {/* <p>{data.name}</p>
             <p>{data.pubKey}</p> */}
