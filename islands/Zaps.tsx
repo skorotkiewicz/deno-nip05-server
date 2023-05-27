@@ -118,8 +118,11 @@ const Zaps = () => {
 
         {data?.success && (
           <span>
-            <p>{data.name}</p>
-            <p>{data.pubKey}</p>
+            <p>
+              <h3>{data.name}@sekor.eu.org</h3>
+            </p>
+            {/* <p>{data.name}</p>
+            <p>{data.pubKey}</p> */}
           </span>
         )}
       </div>
