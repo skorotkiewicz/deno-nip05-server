@@ -5,18 +5,14 @@ export const handler: Handlers = {
   async GET(req: Request, _ctx: HandlerContext): Promise<Response> {
     const name: string = new URL(req.url).searchParams.get("name") || "";
 
-    if (!name) {
-      return Response.json({ error: "Please provide name" }, { status: 400 });
-    }
+    const data: string = name
+      ? { [name]: await db.value.get(name) }
+      : await db.value.all();
 
-    const data: string = await db.value.get(name);
+    const json = {
+      names: Object.fromEntries(Object.entries(data).sort()),
+    };
 
-    if (data) {
-      const res = { names: { [name]: data } };
-      return Response.json(res, { status: 200 });
-    } else {
-      const res = { error: "Name not found." };
-      return Response.json(res, { status: 404 });
-    }
+    return Response.json(json, { status: 200 });
   },
 };
